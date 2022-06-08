@@ -1,0 +1,108 @@
+# This is a sample Python script.
+
+# Press Shift+F10 to execute it or replace it with your code.
+# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+#Importar bibliotecas de banco e de tela
+import sqlite3 as con
+import tkinter as tk
+
+conexao = con.connect('clientes.db')
+c = conexao.cursor()
+
+#Comando para deletar tabela
+#c.execute("DROP TABLE clientes")
+
+#Criação da tabela
+"""c.execute(CREATE TABLE clientes (
+    nome text,
+    sobrenome text,
+    email text,
+    telefone int,
+    data_nascimento date))"""
+
+#Comando para pesquisa dos clientes no banco de dados
+c.execute("Select * from clientes")
+clientes_cadastrados = c.fetchall()
+conexao.commit()
+conexao.close()
+
+#Função para cadastrar o cliente no banco de dados
+def cadastrar_cliente():
+    nome = entry_nome.get(),
+    sobrenome = entry_sobrenome.get(),
+    cpf = entry_cpf.get(),
+    email = entry_email.get(),
+    telefone = entry_telefone.get()
+    if ((nome =='') or (sobrenome =='') or (cpf=='') or (email=='') or (telefone =='')):
+        print('Erro! Preencha todos os campos!')
+        erro = set('Erro! Preencha todos os campos!')
+        return erro
+    else:
+        conexao = con.connect('clientes.db')
+        c = conexao.cursor()
+        c.execute("INSERT INTO clientes VALUES (:nome, :sobrenome, :cpf, :email, :telefone)",
+              {
+                  'nome': nome,
+                  'sobrenome': sobrenome,
+                  'cpf': cpf,
+                  'email' :enail,
+                  'telefone': telefone
+              })
+        conexao.commit()
+        conexao.close()
+
+#Limpando os entradas padrões
+    entry_nome.delete(0,"end")
+    entry_sobrenome.delete(0,"end")
+    entry_cpf.delete(0,"end")
+    entry_email.delete(0,"end")
+    entry_telefone.delete(0,"end")
+
+#Criação de tela
+janela = tk.Tk()
+janela.title('Cadastro de Clientes')
+
+#Título da Tela
+label1 = tk.Label(janela, text="Cadastro de Cliente", font=("arial",16,"bold"))
+label1.grid(row=0, columnspan=2, padx=10, pady=10, ipadx=80)
+
+#Legendas
+label_nome = tk.Label(janela, text='Nome')
+label_nome.grid(row=1, column=0, padx=10, pady=10)
+
+label_sobrenome = tk.Label(janela, text='Sobrenome')
+label_sobrenome.grid(row=2, column=0, padx=10, pady=10)
+
+label_cpf = tk.Label(janela, text='CPF')
+label_cpf.grid(row=3, column=0, padx=10, pady=10)
+
+label_email = tk.Label(janela, text='E-mail')
+label_email.grid(row=4, column=0, padx=10, pady=10)
+
+label_telefone = tk.Label(janela, text='Telefone')
+label_telefone.grid(row=5, column=0, padx=10, pady=10)
+
+#Entradas
+entry_nome = tk.Entry(janela , width =35)
+entry_nome.grid(row=1, column=1, padx=10, pady=10)
+
+entry_sobrenome = tk.Entry(janela, width =35)
+entry_sobrenome.grid(row=2, column=1, padx=10, pady=10)
+
+entry_cpf = tk.Entry(janela, width =35)
+entry_cpf.grid(row=3, column=1, padx=10, pady=10)
+
+entry_email = tk.Entry(janela, width =35)
+entry_email.grid(row=4, column=1, padx=10, pady=10)
+
+entry_telefone = tk.Entry(janela, width =35)
+entry_telefone.grid(row=5, column=1, padx=10, pady=10)
+
+#Botão que executa função de cadastro
+botao_cadastrar = tk.Button(text='Cadastrar Cliente', command=cadastrar_cliente)
+botao_cadastrar.grid(row=6, column=0, columnspan=2, padx=10, pady=10, ipadx=80)
+
+#Teste de exibição dos clientes cadastrados
+label2 = tk.Label(janela, text=clientes_cadastrados, font=("arial",12,"bold"))
+label2.grid(row=7, columnspan=2, padx=10, pady=10, ipadx=80)
+janela.mainloop()
